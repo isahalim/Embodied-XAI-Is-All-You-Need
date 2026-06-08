@@ -4,9 +4,9 @@
 
 *Explainable AI · Embodied AI — presented by S. Halim (University of Washington)*
 
-![Project poster](docs/poster_preview.png)
+![Project poster](/xai-planner-is-all-you-need/docs/poster_preview.png)
 
-> The full-resolution poster is in [`docs/`](docs/XAI_Planner_Is_All_You_Need_poster.pdf).
+The full-resolution poster is in [/xai-planner-is-all-you-need/docs/](/xai-planner-is-all-you-need/docs/).
 
 ---
 
