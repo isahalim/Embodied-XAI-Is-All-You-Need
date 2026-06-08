@@ -12,9 +12,7 @@
 
 <img width="1280" height="360" alt="hostile_combo" src="https://github.com/user-attachments/assets/69a804dd-1b68-42c0-b80e-e64fdd73b43d" />
 
-<div style="border-radius: 12px; overflow: hidden; display: inline-block;">
-    <img src="poster_preview.png" alt="Project poster" />
-</div>
+<img src="poster_preview.png" alt="Project poster" class="rounded-image" />
 
 > The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](XAI_Planner_Is_All_You_Need_poster.pdf).
 
