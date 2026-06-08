@@ -10,7 +10,8 @@
 
 ### Embodied AI Agent instructed: *go to the friendly one*
 
-![Embodied AI Agent instructed: go to the friendly one](simulation_demos/friendly_combo.mp4)
+![Embodied AI Agent instructed: go to the friendly one]
+https://github.com/user-attachments/assets/ca14bd28-b3f9-49c7-8307-aee71751dccf
 
 ### Embodied AI Agent instructed: *go to the hostile one*
 
