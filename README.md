@@ -10,7 +10,7 @@
 
 ### Embodied AI Agent instructed: *go to the friendly one*
 
-<video src="https://github.com/user-attachments/assets/ca14bd28-b3f9-44c7-8307-aee71751dccf" autoplay loop muted playsinline width="100%"></video>
+https://github.com/user-attachments/assets/ca14bd28-b3f9-49c7-8307-aee71751dccf
 
 ### Embodied AI Agent instructed: *go to the hostile one*
 
