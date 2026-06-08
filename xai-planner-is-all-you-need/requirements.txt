@@ -1,0 +1,24 @@
+# Pins taken directly from the notebooks. This project was developed on
+# Google Colab with an A100 GPU; do NOT reinstall torch on Colab — use the
+# runtime's bundled CUDA build. Outside Colab, install a torch build that
+# matches your CUDA toolkit first (see https://pytorch.org).
+
+# --- Locomotion / simulation stack ---
+genesis-world          # universal physics & rendering engine for robotics
+rsl-rl-lib==2.2.4      # on-policy RL runner (PPO). Genesis pins this exact API.
+tensorboard
+pyvirtualdisplay
+mediapy
+imageio[ffmpeg]
+
+# --- VLM planner + analysis stack ---
+transformers           # Qwen2.5-VL-3B-Instruct
+accelerate
+qwen-vl-utils
+scipy                  # chi-square, contingency tests in NB3
+scikit-image
+opencv-python
+matplotlib
+open3d                 # camera geometry / point-cloud utilities (saliency)
+numpy
+Pillow
