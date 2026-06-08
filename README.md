@@ -140,10 +140,7 @@ in action-only mode the effect disappears.
     └── nb3_behavioral_bias.py
 ```
 
-The modules in `src/` are extracted from the `%%writefile` cells in NB0/NB1, so
-the library is reviewable without running Colab. See
-[`notebooks/README.md`](notebooks/README.md) for the run order and how modules are
-loaded at runtime.
+The modules in [`src/`](xai-planner-is-all-you-need/src/) are extracted from the `%%writefile` cells in NB0/NB1, so the library is reviewable without running Colab. See [`notebooks/README.md`](xai-planner-is-all-you-need/notebooks/README.md) for the run order and how modules are loaded at runtime.
 
 ## Getting started
 
