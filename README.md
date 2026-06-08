@@ -4,10 +4,6 @@
 
 *Explainable AI · Embodied AI — presented by S. Halim (University of Washington)*
 
-![Project poster](poster_preview.png)
-
-> The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](XAI_Planner_Is_All_You_Need_poster.pdf).
-
 ### Embodied AI Agent instructed: *go to the friendly one*
 
 <img width="1280" height="360" alt="friendly_combo" src="https://github.com/user-attachments/assets/33d9ee73-974b-430c-a178-3fd1f5d1817f" />
@@ -16,6 +12,9 @@
 
 <img width="1280" height="360" alt="hostile_combo" src="https://github.com/user-attachments/assets/69a804dd-1b68-42c0-b80e-e64fdd73b43d" />
 
+![Project poster](poster_preview.png)
+
+> The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](XAI_Planner_Is_All_You_Need_poster.pdf).
 
 ---
 
