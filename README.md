@@ -41,25 +41,9 @@ unintended consequences before they reach the motors.
 
 The system is a slow planner stacked on a fast controller.
 
-```mermaid
-flowchart LR
-    subgraph INPUTS
-        A["onboard camera view"]
-        B["instruction<br/>e.g. 'go to the friendly one'"]
-    end
-    A --> P
-    B --> P
-    subgraph PLANNER["Slow planner · 1–5 Hz"]
-        P["Qwen2.5-VL-3B<br/>JSON: turn 0–4, speed 0–2"]
-    end
-    P --> T["translate buckets →<br/>(v_x, v_y, w_z)<br/>clamp + low-pass"]
-    T --> C
-    subgraph CONTROLLER["Fast controller · 50 Hz"]
-        C["PPO actor–critic<br/>512·256·128 → 12 joints"]
-    end
-    C --> R["Unitree Go2<br/>PD-controlled joints"]
-    R -->|new first-person frame every step| A
-```
+
+<img width="1360" height="1132" alt="go2_vla_control_pipeline" src="https://github.com/user-attachments/assets/9af5dfe9-0eda-4171-9b7b-5d0c81014226" />
+
 
 - **The Planner** — `Qwen2.5-VL-3B-Instruct` looks at the onboard frame, reads
   the instruction, and emits one JSON object with a bucketed `turn` (0 = hard
