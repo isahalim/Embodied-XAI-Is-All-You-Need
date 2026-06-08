@@ -10,7 +10,7 @@
 
 ### Embodied AI Agent instructed: *go to the friendly one*
 
-https://github.com/user-attachments/assets/ca14bd28-b3f9-49c7-8307-aee71751dccf
+<img width="1280" height="360" alt="friendly_combo" src="https://github.com/user-attachments/assets/33d9ee73-974b-430c-a178-3fd1f5d1817f" />
 
 ### Embodied AI Agent instructed: *go to the hostile one*
 
