@@ -141,8 +141,7 @@ This was developed on **Google Colab with an A100 GPU** and headless EGL/Xvfb
 rendering, using Google Drive for cross-session state.
 
 1. Open the notebooks in `notebooks/` in Colab (convert from `.py` with
-   `jupytext --to notebook notebooks/nbX_*.py`, or use the `.ipynb` files if you
-   added them).
+   `jupytext --to notebook notebooks/nbX_*.py`, or use the `.ipynb` files from [drive](https://drive.google.com/drive/folders/1EBQKMpKgqXE6ueNPMsHTeDi4h6Ikmu-o?usp=sharing).
 2. Set **Runtime → Change runtime type → A100 GPU**.
 3. Run **NB0 → NB1 → NB2 → NB3** in order. NB0 installs everything and writes the
    shared modules to Drive; later notebooks reload them and resume from prior
