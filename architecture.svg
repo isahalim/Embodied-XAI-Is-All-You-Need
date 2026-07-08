@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="400" viewBox="0 0 1180 400" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#5b6570"/>
+    </marker>
+    <marker id="arrb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#a86f2f"/>
+    </marker>
+  </defs>
+
+  <!-- timescale bands -->
+  <rect x="18" y="30" width="806" height="284" rx="22" fill="#eef3f8"/>
+  <rect x="840" y="30" width="322" height="284" rx="22" fill="#f3efe8"/>
+  <text x="34" y="57" font-size="14.5" fill="#77828e" font-weight="bold" letter-spacing="1">SEMANTIC LOOP · 3 Hz</text>
+  <text x="856" y="57" font-size="14.5" fill="#a08a68" font-weight="bold" letter-spacing="1">PHYSICAL LOOP · 50 Hz</text>
+
+  <!-- camera -->
+  <rect x="40" y="150" width="150" height="64" rx="16" fill="#ffffff" stroke="#c3ccd6" stroke-width="1.5"/>
+  <text x="115" y="177" font-size="14.5" fill="#2e3a46" text-anchor="middle" font-weight="bold">Onboard camera</text>
+  <text x="115" y="196" font-size="12" fill="#67737f" text-anchor="middle">RGB &#183; depth &#183; pose</text>
+
+  <!-- short-term memory -->
+  <rect x="238" y="82" width="188" height="64" rx="16" fill="#ffffff" stroke="#c3ccd6" stroke-width="1.5"/>
+  <text x="332" y="107" font-size="14.5" fill="#2e3a46" text-anchor="middle" font-weight="bold">Short-term video</text>
+  <text x="332" y="126" font-size="12" fill="#67737f" text-anchor="middle">last 4 frames &#183; 0.33 s stride</text>
+
+  <!-- long-term memory -->
+  <rect x="238" y="222" width="188" height="64" rx="16" fill="#ffffff" stroke="#c3ccd6" stroke-width="1.5"/>
+  <text x="332" y="247" font-size="14.5" fill="#2e3a46" text-anchor="middle" font-weight="bold">Long-term language</text>
+  <text x="332" y="266" font-size="12" fill="#67737f" text-anchor="middle">&#8804;600 chars &#183; rewritten / query</text>
+
+  <!-- MEM bracket label -->
+  <text x="332" y="188" font-size="12" fill="#8b97a3" text-anchor="middle" font-style="italic">adapted MEM memory</text>
+
+  <!-- planner -->
+  <rect x="486" y="132" width="196" height="100" rx="18" fill="#dfe9f5" stroke="#9db4cc" stroke-width="1.8"/>
+  <text x="584" y="164" font-size="15" fill="#22384e" text-anchor="middle" font-weight="bold">Qwen2.5-VL-3B</text>
+  <text x="584" y="184" font-size="12.5" fill="#42586e" text-anchor="middle">frozen VLM planner</text>
+  <text x="584" y="204" font-size="12" fill="#42586e" text-anchor="middle">JSON: choice &#183; rationale</text>
+  <text x="584" y="220" font-size="12" fill="#42586e" text-anchor="middle">(v&#8339;, v&#8342;, &#969;&#8350;) &#183; memory&#8242;</text>
+
+  <!-- LPF -->
+  <rect x="726" y="150" width="76" height="64" rx="16" fill="#ffffff" stroke="#c3ccd6" stroke-width="1.5"/>
+  <text x="764" y="177" font-size="14" fill="#2e3a46" text-anchor="middle" font-weight="bold">LPF</text>
+  <text x="764" y="196" font-size="12" fill="#67737f" text-anchor="middle">&#945; = 0.35</text>
+
+  <!-- PPO -->
+  <rect x="862" y="150" width="128" height="64" rx="16" fill="#f7e9d3" stroke="#d3b78c" stroke-width="1.6"/>
+  <text x="926" y="177" font-size="14.5" fill="#4b3a22" text-anchor="middle" font-weight="bold">PPO gait policy</text>
+  <text x="926" y="196" font-size="12" fill="#7b6748" text-anchor="middle">command tracking</text>
+
+  <!-- robot -->
+  <rect x="1022" y="150" width="118" height="64" rx="16" fill="#ffffff" stroke="#d3b78c" stroke-width="1.5"/>
+  <text x="1081" y="177" font-size="14.5" fill="#4b3a22" text-anchor="middle" font-weight="bold">Unitree Go2</text>
+  <text x="1081" y="196" font-size="12" fill="#7b6748" text-anchor="middle">Genesis sim</text>
+
+  <!-- edges (curved) -->
+  <!-- camera -> short-term -->
+  <path d="M 190 168 C 214 160, 214 122, 238 114" fill="none" stroke="#5b6570" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- short-term -> planner -->
+  <path d="M 426 114 C 458 122, 454 152, 486 160" fill="none" stroke="#5b6570" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- long-term -> planner -->
+  <path d="M 426 250 C 458 242, 454 212, 486 204" fill="none" stroke="#5b6570" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- planner -> long-term rewrite (curved return) -->
+  <path d="M 520 232 C 500 268, 470 286, 426 278" fill="none" stroke="#8b97a3" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arr)"/>
+  <text x="486" y="296" font-size="11.5" fill="#8b97a3" text-anchor="middle" font-style="italic">rewrite &amp; compress</text>
+  <!-- planner -> LPF -->
+  <path d="M 682 182 C 698 182, 710 182, 726 182" fill="none" stroke="#5b6570" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- LPF -> PPO -->
+  <path d="M 802 182 C 824 182, 840 182, 862 182" fill="none" stroke="#a86f2f" stroke-width="2" marker-end="url(#arrb)"/>
+  <!-- PPO -> robot -->
+  <path d="M 990 182 C 1002 182, 1010 182, 1022 182" fill="none" stroke="#a86f2f" stroke-width="2" marker-end="url(#arrb)"/>
+  <!-- robot -> camera (long return loop along bottom) -->
+  <path d="M 1081 214 C 1081 356, 115 356, 115 214" fill="none" stroke="#8b97a3" stroke-width="1.8" stroke-dasharray="6 5" marker-end="url(#arr)"/>
+  <text x="590" y="368" font-size="11.5" fill="#8b97a3" text-anchor="middle" font-style="italic">closed loop: the world the robot moves through is the world the planner sees</text>
+
+  <!-- attribution tap -->
+  <path d="M 584 132 C 584 110, 604 92, 652 88" fill="none" stroke="#b0575f" stroke-width="1.8" stroke-dasharray="2.5 4" marker-end="url(#arr)"/>
+  <rect x="548" y="40" width="252" height="48" rx="14" fill="#fbeeee" stroke="#d9a3a8" stroke-width="1.4"/>
+  <text x="674" y="60" font-size="13" fill="#7c3a41" text-anchor="middle" font-weight="bold">IG on chosen &#969;&#8350; tokens</text>
+  <text x="674" y="78" font-size="11.5" fill="#9c5b62" text-anchor="middle">+ depth &amp; pose &#8594; 4D heat field (&#167;5)</text>
+</svg>
