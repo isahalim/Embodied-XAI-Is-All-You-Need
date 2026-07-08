@@ -1,4 +1,4 @@
-# XAI Planner Is All You Need
+# Embodied XAI Planner Is All You Need
 
 **Revealing hidden preferences of vision–language models that leak into quadruped movement using XAI methods.**
 
