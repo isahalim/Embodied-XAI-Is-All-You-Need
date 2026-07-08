@@ -22,7 +22,7 @@
 
 <img width="350" height="496" alt="poster_embodied_xai" src="https://github.com/user-attachments/assets/644988cf-7629-4456-a8fb-15701e5b0d73" />
 
-> The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](XAI_Planner_Is_All_You_Need_poster.pdf).
+> The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](poster_embodied_xai.pdf).
 
 ---
 
