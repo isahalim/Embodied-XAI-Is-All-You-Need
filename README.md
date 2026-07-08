@@ -6,13 +6,21 @@
 
 ### Embodied AI Agent instructed: *go to the friendly one*
 
-<img width="1280" height="360" alt="friendly_combo" src="https://github.com/user-attachments/assets/33d9ee73-974b-430c-a178-3fd1f5d1817f" />
+<img width="1280" height="360" alt="friendly_combo_plain" src="https://github.com/user-attachments/assets/4361ddb8-d4ef-4cfc-87a8-3b2562b5bdc9" />
+
+### 4D Saliency: *go to the friendly one*
+
+<img width="1280" height="360" alt="friendly_combo_saliency" src="https://github.com/user-attachments/assets/ced274c9-7277-499b-8272-652152b06254" />
 
 ### Embodied AI Agent instructed: *go to the hostile one*
 
-<img width="1280" height="360" alt="hostile_combo" src="https://github.com/user-attachments/assets/69a804dd-1b68-42c0-b80e-e64fdd73b43d" />
+<img width="1280" height="360" alt="hostile_combo_plain" src="https://github.com/user-attachments/assets/6f4c4dd6-a50b-442a-9343-8624376a4887" />
 
-<img width="1500" height="1125" alt="poster_preview" src="https://github.com/user-attachments/assets/c2681183-1d8e-4728-9f6a-7c10ccb92c08" />
+### 4D Saliency: *go to the hostile one*
+
+<img width="1280" height="360" alt="hostile_combo_saliency" src="https://github.com/user-attachments/assets/bd0dc629-69f7-429d-a829-acbd1806ffff" />
+
+<img width="350" height="496" alt="poster_embodied_xai" src="https://github.com/user-attachments/assets/644988cf-7629-4456-a8fb-15701e5b0d73" />
 
 > The full-resolution poster is here: [XAI_Planner_Is_All_You_Need_poster.pdf](XAI_Planner_Is_All_You_Need_poster.pdf).
 
