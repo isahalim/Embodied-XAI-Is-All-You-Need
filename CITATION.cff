@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
 title: >-
-  Embodied XAI Planner Is All You Need: Revealing hidden preferences of
+  Embodied XAI Is All You Need: Revealing hidden preferences of
   vision–language models that leak into quadruped movement using XAI methods
 authors:
   - family-names: Halim
