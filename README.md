@@ -231,7 +231,7 @@ API; other versions will break training.
 
 If you use this work, please cite it via [`CITATION.cff`](CITATION.cff) or:
 
-> S. Halim. *Embodied XAI Planner Is All You Need: Revealing hidden preferences
+> S. Halim. *Embodied XAI Is All You Need: Revealing hidden preferences
 > of vision–language models that leak into quadruped movement using XAI methods.*
 
 ## License
