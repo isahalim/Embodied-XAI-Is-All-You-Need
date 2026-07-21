@@ -201,7 +201,7 @@ This was developed on **Google Colab with an A100 GPU** and headless EGL/Xvfb
 rendering, using Google Drive for cross-session state.
 
 1. Upload the notebook to Colab, or open it from
-   [Drive](https://drive.google.com/drive/folders/1EBQKMpKgqXE6ueNPMsHTeDi4h6Ikmu-o?usp=sharing).
+   [GitHub](https://github.com/isahalim/Embodied-XAI-Is-All-You-Need/blob/main/code_trace_4D_embodied_xai.ipynb).
 2. Set **Runtime → Change runtime type → A100 GPU**.
 3. Run sections in order: **§0–§2** (runtime, Drive, dependencies) → **§3**
    (config) → **§4–§5** (env + utilities) → **§9** (PPO training or checkpoint
