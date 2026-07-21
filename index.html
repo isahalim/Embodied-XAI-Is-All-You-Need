@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
   <script src="./support.js"></script>
 </head>
 
@@ -158,13 +160,13 @@
         <div ref="{{refHeroDiv}}"
           style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(255,255,255,.9);box-shadow:0 0 8px rgba(0,0,0,.4);">
           <div
-            style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,.85);backdrop-filter:blur(8px);color:#1d1d1f;font-size:11px;font-weight:700;padding:6px 10px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25);">
+            style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,255,255,.85);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#1d1d1f;font-size:11px;font-weight:700;padding:6px 10px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25);">
             ◂&nbsp;▸</div>
         </div>
         <span
-          style="position:absolute;top:12px;left:12px;background:rgba(29,29,31,.6);backdrop-filter:blur(8px);color:#fff;font-size:10px;letter-spacing:.1em;padding:5px 11px;font-weight:700;border-radius:999px;">BLACK&nbsp;BOX</span>
+          style="position:absolute;top:12px;left:12px;background:rgba(29,29,31,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:10px;letter-spacing:.1em;padding:5px 11px;font-weight:700;border-radius:999px;">BLACK&nbsp;BOX</span>
         <span
-          style="position:absolute;top:12px;right:12px;background:rgba(29,29,31,.6);backdrop-filter:blur(8px);color:#fff;font-size:10px;letter-spacing:.1em;padding:5px 11px;font-weight:700;border-radius:999px;">INTERPRETABLE</span>
+          style="position:absolute;top:12px;right:12px;background:rgba(29,29,31,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font-size:10px;letter-spacing:.1em;padding:5px 11px;font-weight:700;border-radius:999px;">INTERPRETABLE</span>
       </div>
       <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">Drag to compare · click the prompt word to
         switch instruction · real trials from the paper, isometric + onboard view</figcaption>
@@ -353,7 +355,7 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:8px 0 20px;">
         <div
           style="background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(1.7);-webkit-backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 12px 40px rgba(31,38,60,.07);padding:22px;">
-          <div style="font-weight:700;font-size:52px;line-height:1;letter-spacing:-0.03em;color:#FF3B30;">87%</div>
+          <div style="font-weight:700;font-size:52px;line-height:1;letter-spacing:-0.03em;color:#FFCC00;">87%</div>
           <p style="font-size:13px;margin:10px 0 0;color:#48484d;">chose the <strong>left</strong> target in the
             color-neutral control — a pure positional bias no color-only audit would reveal (p ≈ 1.3×10⁻¹⁴)</p>
         </div>
@@ -365,7 +367,7 @@
         </div>
         <div
           style="background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(1.7);-webkit-backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 12px 40px rgba(31,38,60,.07);padding:22px;">
-          <div style="font-weight:700;font-size:52px;line-height:1;letter-spacing:-0.03em;color:#34C759;">300</div>
+          <div style="font-weight:700;font-size:52px;line-height:1;letter-spacing:-0.03em;color:#FF3B30;">300</div>
           <p style="font-size:13px;margin:10px 0 0;color:#48484d;">trials across 6 categories: mirrored arrangements
             pooled against a same-color baseline</p>
         </div>
@@ -544,8 +546,9 @@
         </sc-if>
         <sc-if value="{{fvIsReach}}" hint-placeholder-val="{{false}}">
           <div style="overflow:hidden;border-radius:24px 24px 0 0;">
-            <video src="{{reachVidSrc}}" autoPlay="{{true}}" loop="{{true}}" muted="{{true}}" playsInline="{{true}}"
-              controls="{{true}}" style="width:100%;display:block;margin-top:-9%;mix-blend-mode:multiply;"></video>
+            <video ref="{{playSafari}}" src="{{reachVidSrc}}" autoPlay="{{true}}" loop="{{true}}" muted="{{true}}"
+              playsInline="{{true}}" controls="{{true}}"
+              style="width:100%;display:block;margin-top:-9%;mix-blend-mode:multiply;"></video>
           </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;padding:12px 20px;border-top:1px solid rgba(29,29,31,.08);">
             Real implementation · “go to the friendly one” · the agent walks to the blue target while attribution
@@ -553,8 +556,9 @@
         </sc-if>
         <sc-if value="{{fvIsDrift}}" hint-placeholder-val="{{false}}">
           <div style="overflow:hidden;border-radius:24px 24px 0 0;">
-            <video src="{{driftVidSrc}}" autoPlay="{{true}}" loop="{{true}}" muted="{{true}}" playsInline="{{true}}"
-              controls="{{true}}" style="width:100%;display:block;margin-top:-9%;mix-blend-mode:multiply;"></video>
+            <video ref="{{playSafari}}" src="{{driftVidSrc}}" autoPlay="{{true}}" loop="{{true}}" muted="{{true}}"
+              playsInline="{{true}}" controls="{{true}}"
+              style="width:100%;display:block;margin-top:-9%;mix-blend-mode:multiply;"></video>
           </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;padding:12px 20px;border-top:1px solid rgba(29,29,31,.08);">
             Real implementation · a drift trial — the agent never commits, and the field stays diffuse instead of
@@ -601,7 +605,8 @@
       <div
         style="background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(1.7);-webkit-backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 12px 40px rgba(31,38,60,.07);overflow:hidden;">
         <sc-if value="{{cvIsSty}}" hint-placeholder-val="{{true}}">
-          <canvas ref="{{refConv}}" width="1000" height="400" style="width:100%;display:block;"></canvas>
+          <canvas ref="{{refConv}}" onPointerDown="{{convDown}}" width="1000" height="400"
+            style="width:100%;display:block;cursor:grab;touch-action:none;"></canvas>
         </sc-if>
         <sc-if value="{{cvIsReal}}" hint-placeholder-val="{{false}}">
           <div style="position:relative;width:100%;height:440px;">
@@ -634,8 +639,9 @@
           </div>
         </sc-if>
       </div>
-      <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">n = 1 · speckled single-trial noise → n = 20 ·
-        converged on the target and its approach corridor · outcome splits isolate each choice's signature</figcaption>
+      <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">Stylized: drag to orbit · n = 1 · speckled
+        single-trial noise → n = 20 · converged on the target and its approach corridor · outcome splits isolate each
+        choice's signature</figcaption>
       <div style="max-width:720px;margin-top:20px;">
         <p>The field supports two more instruments. <strong>Outcome-split fields</strong> pool trials by what the agent
           did — nearer-red vs nearer-blue, reached vs drifted — isolating the attention signature of each choice, and of
@@ -732,8 +738,9 @@ class Component extends DCLogic {
     fieldView: 'stylized', convView: 'stylized', navHidden: false, activeNav: '' };
 
   cv = {};
-  C = { ink: '#1d1d1f', mut: '#6e6e73', blue: '#0A84FF', green: '#34C759', red: '#FF3B30' };
+  C = { ink: '#1d1d1f', mut: '#6e6e73', blue: '#0A84FF', green: '#34C759', red: '#FF3B30', yellow: '#FFCC00' };
   heroSplit = 50; simArr = 0; simPaths = []; ft = 1; fYaw = 0.85; fElev = 0.9;
+  cvYaw = 0.7; cvElev = 0.95;
   igClock = 0; animT = 0;
   fnt(w, s) { return w + ' ' + s + 'px -apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif'; }
 
@@ -755,7 +762,33 @@ class Component extends DCLogic {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // CanvasRenderingContext2D.roundRect only shipped in Safari 16.4. Every visualization
+  // here uses it, and a throw inside the rAF loop would freeze all of them on older
+  // Safari — so polyfill it before the first frame. No-op where it already exists.
+  ensureRoundRect() {
+    const P = window.CanvasRenderingContext2D && window.CanvasRenderingContext2D.prototype;
+    if (!P || P.roundRect) return;
+    P.roundRect = function (x, y, w, h, r) {
+      let rr = r;
+      if (typeof rr === 'number') rr = [rr, rr, rr, rr];
+      else if (Array.isArray(rr)) {
+        if (rr.length === 1) rr = [rr[0], rr[0], rr[0], rr[0]];
+        else if (rr.length === 2) rr = [rr[0], rr[1], rr[0], rr[1]];
+        else if (rr.length === 3) rr = [rr[0], rr[1], rr[2], rr[1]];
+      } else rr = [0, 0, 0, 0];
+      const m = Math.min(Math.abs(w), Math.abs(h)) / 2;
+      const tl = Math.min(rr[0], m), tr = Math.min(rr[1], m), br = Math.min(rr[2], m), bl = Math.min(rr[3], m);
+      this.moveTo(x + tl, y);
+      this.arcTo(x + w, y, x + w, y + h, tr);
+      this.arcTo(x + w, y + h, x, y + h, br);
+      this.arcTo(x, y + h, x, y, bl);
+      this.arcTo(x, y, x + w, y, tl);
+      this.closePath();
+      return this;
+    };
+  }
   componentDidMount() {
+    this.ensureRoundRect();
     this.genData();
     this.lastY = 0;
     this.onScroll = () => {
@@ -793,10 +826,12 @@ class Component extends DCLogic {
     };
     window.addEventListener('scroll', this.onScroll, { passive: true });
     this.onScroll();
-    this.vidUrls = {};
-    for (const [key, path] of [['reach', 'uploads/Reach_Lred-Rblue__Gotothefriendlyone_view1-a45ad972.mp4'], ['drift', 'uploads/Drift_Lred-Rblue__Gotothefriendlyone_view1.mp4']]) {
-      fetch(path).then(r => r.blob()).then(b => { this.vidUrls[key] = URL.createObjectURL(b); this.forceUpdate(); }).catch(() => {});
-    }
+    // Point videos straight at the files. Safari can't reliably play a <video> from a
+    // blob: URL built via fetch (no HTTP range support) — a direct src lets it stream.
+    this.vidUrls = {
+      reach: 'uploads/Reach_Lred-Rblue__Gotothefriendlyone_view1-a45ad972.mp4',
+      drift: 'uploads/Drift_Lred-Rblue__Gotothefriendlyone_view1.mp4',
+    };
     this.last = performance.now();
     const loop = (now) => {
       const dt = Math.min(0.05, (now - this.last) / 1000); this.last = now;
@@ -815,7 +850,15 @@ class Component extends DCLogic {
     };
     this.raf = requestAnimationFrame(loop);
   }
-  componentWillUnmount() { cancelAnimationFrame(this.raf); window.removeEventListener('scroll', this.onScroll); for (const k in this.vidUrls) URL.revokeObjectURL(this.vidUrls[k]); }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); window.removeEventListener('scroll', this.onScroll); }
+  // Safari won't autoplay unless the muted *property* (not just the attribute) is set
+  // before play() is called; kick playback once the element can render a frame.
+  playSafari = (el) => {
+    if (!el) return;
+    el.muted = true; el.defaultMuted = true; el.playsInline = true;
+    const go = () => { const p = el.play(); if (p && p.catch) p.catch(() => {}); };
+    if (el.readyState >= 2) go(); else el.addEventListener('canplay', go, { once: true });
+  };
 
   trajPos(p) { const e = p * p * (3 - 2 * p); return [1.2 * e, 0.2 + 2.6 * p]; }
 
@@ -859,6 +902,8 @@ class Component extends DCLogic {
         else arr.push({ x: 0.6 * R2() * 2 + bias * 0.5 + (R2() - 0.5) * 0.5, y: 0.4 + 2.4 * R2(), z: 0.015, w: 0.3 + 0.4 * R2() });
       }
       for (let j = 0; j < 8; j++) arr.push({ x: (R2() - 0.5) * 4.2, y: R2() * 4.2, z: R2() * 0.8, w: 0.3 + 0.4 * R2() });
+      // back-wall accumulation — diffuse background influence, same as the §07 field
+      for (let j = 0; j < 5; j++) arr.push({ x: (R2() - 0.5) * 4, y: 4.4, z: R2() * 1.05, w: 0.15 + 0.28 * R2() });
       this.convTrials.push(arr);
     }
   }
@@ -877,12 +922,13 @@ class Component extends DCLogic {
   }
   heroDown = (e) => {
     if (e.target.tagName === 'BUTTON') return;
+    this.capturePointer(e);
     const rect = this.heroEl.getBoundingClientRect();
     const upd = (ev) => { this.heroSplit = Math.max(3, Math.min(97, (ev.clientX - rect.left) / rect.width * 100)); this.applyHero(); };
     upd(e);
     const mv = (ev) => upd(ev);
-    const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
-    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+    const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
   };
   togglePrompt = () => this.setState(s => ({ heroPrompt: (s.heroPrompt ?? (this.props.defaultPrompt ?? 'friendly')) === 'friendly' ? 'hostile' : 'friendly' }));
   toggleTap = () => this.setState(s => ({ showTap: !s.showTap }));
@@ -1087,16 +1133,18 @@ class Component extends DCLogic {
     x.textBaseline = 'top'; x.textAlign = 'left';
     x.fillStyle = this.C.mut; x.font = this.fnt('700', 11);
     x.fillText('PER-FRAME 2D — EVERY QUERY ITS OWN COORDINATES', 30, 20);
+    // roll = onboard camera tilt (deg) — the robot's head bobs and rolls as it walks,
+    // so the horizon is rarely level; some frames are steady, others clearly canted.
     const specs = [
-      { b: .72, r: .30, sc: 1.0, heat: 'b', lab: 'both in frame' },
-      { b: .50, r: null, sc: 2.4, heat: 'b', lab: 'close-up — only blue visible' },
-      { b: .97, r: .45, sc: 1.1, heat: 'b', lab: 'blue almost cropped out' },
-      { b: .80, r: .20, sc: .7, heat: 'floor', lab: 'heat on the floor, not a target' },
-      { b: .75, r: .25, sc: 1.0, heat: 'r', lab: 'flipped — heat on red this query' },
-      { b: .88, r: .34, sc: .9, heat: 'b', lab: 'both in frame' },
-      { b: null, r: .5, sc: 2.1, heat: 'none', lab: 'close-up — only red, no heat' },
-      { b: .65, r: .15, sc: .8, heat: 'hor', lab: 'heat on the horizon' },
-      { b: .70, r: .28, sc: 1.2, heat: 'b', lab: 'both in frame' },
+      { b: .72, r: .30, sc: 1.0, heat: 'b', roll: 0, lab: 'both in frame' },
+      { b: .50, r: null, sc: 2.4, heat: 'b', roll: 7, lab: 'close-up — camera rolled mid-stride' },
+      { b: .97, r: .45, sc: 1.1, heat: 'b', roll: -4, lab: 'blue almost cropped out' },
+      { b: .80, r: .20, sc: .7, heat: 'floor', roll: 9, lab: 'heat on the floor, not a target' },
+      { b: .75, r: .25, sc: 1.0, heat: 'r', roll: -6, lab: 'flipped — heat on red this query' },
+      { b: .88, r: .34, sc: .9, heat: 'b', roll: 0, lab: 'both in frame' },
+      { b: null, r: .5, sc: 2.1, heat: 'none', roll: 5, lab: 'close-up — only red, no heat' },
+      { b: .65, r: .15, sc: .8, heat: 'hor', roll: -9, lab: 'canted — horizon runs downhill' },
+      { b: .70, r: .28, sc: 1.2, heat: 'b', roll: 3, lab: 'both in frame' },
     ];
     const R = this.mul(7);
     for (let i = 0; i < 9; i++) {
@@ -1108,7 +1156,14 @@ class Component extends DCLogic {
       x.save(); x.beginPath(); x.roundRect(fx, fy, fw, fh, 10); x.clip();
       x.fillStyle = '#e6e9ee'; x.fillRect(fx, fy, fw, fh);
       const hor = fy + fh * (0.42 + jy * 0.14);
-      x.fillStyle = '#cdd2da'; x.fillRect(fx, hor, fw, fh);
+      // tilt the scene by the camera roll; the frame itself stays rectangular, so the
+      // horizon runs at an angle across it. Oversize the ground fill so the rotated
+      // corners still cover the clipped frame.
+      const roll = (sp.roll || 0) * Math.PI / 180;
+      x.save();
+      const cxF = fx + fw / 2, cyF = fy + fh / 2;
+      x.translate(cxF, cyF); x.rotate(roll); x.translate(-cxF, -cyF);
+      x.fillStyle = '#cdd2da'; x.fillRect(fx - fw, hor, fw * 3, fh * 2);
       const S = 18 * sp.sc;
       const cubeM = (cxf, color) => { if (cxf == null) return null; const cx2 = fx + fw * cxf; x.fillStyle = color; x.beginPath(); x.roundRect(cx2 - S / 2, hor - S, S, S, Math.min(6, S * 0.25)); x.fill(); return [cx2, hor - S / 2]; };
       const rpos = cubeM(sp.r, this.C.red), bpos = cubeM(sp.b, this.C.blue);
@@ -1117,6 +1172,7 @@ class Component extends DCLogic {
       if (sp.heat === 'r' && rpos) blob(rpos[0], rpos[1], S * 1.6, 0.65);
       if (sp.heat === 'floor') blob(fx + fw * (0.3 + jh * 0.4), hor + fh * 0.22, 16, 0.6);
       if (sp.heat === 'hor') blob(fx + fw * (0.2 + jh * 0.6), hor - 5, 14, 0.55);
+      x.restore();
       x.restore();
       x.strokeStyle = 'rgba(29,29,31,.2)'; x.lineWidth = 1; x.beginPath(); x.roundRect(fx, fy, fw, fh, 10); x.stroke();
       x.fillStyle = this.C.mut; x.font = this.fnt('400', 9.5); x.fillText(`q${i + 1} — ${sp.lab}`, fx + 4, fy + fh + 5);
@@ -1138,12 +1194,26 @@ class Component extends DCLogic {
     const Y = -px * Math.sin(yw) + wy * Math.cos(yw);
     return Y * Math.cos(el) - pz * Math.sin(el);
   }
+  // Route all subsequent move/up events to the element we started on. Without this,
+  // Safari can drop pointermove after the cursor leaves the canvas mid-drag.
+  capturePointer(e) {
+    try { const el = e.currentTarget; if (el && el.setPointerCapture && e.pointerId != null) el.setPointerCapture(e.pointerId); } catch (_) {}
+  }
   fieldDown = (e) => {
     e.preventDefault();
+    this.capturePointer(e);
     let lx = e.clientX, ly = e.clientY;
     const mv = (ev) => { this.fYaw += (ev.clientX - lx) * 0.008; this.fElev = Math.max(0.35, Math.min(1.25, this.fElev + (ev.clientY - ly) * 0.008)); lx = ev.clientX; ly = ev.clientY; };
-    const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
-    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+    const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+  };
+  convDown = (e) => {
+    e.preventDefault();
+    this.capturePointer(e);
+    let lx = e.clientX, ly = e.clientY;
+    const mv = (ev) => { this.cvYaw += (ev.clientX - lx) * 0.008; this.cvElev = Math.max(0.35, Math.min(1.25, this.cvElev + (ev.clientY - ly) * 0.008)); lx = ev.clientX; ly = ev.clientY; };
+    const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
   };
   setFieldT = (e) => { this.ft = +e.target.value; this.setState({ fieldT: this.ft, fieldPlaying: false }); };
   setFvSty = () => this.setState({ fieldView: 'stylized' });
@@ -1217,18 +1287,36 @@ class Component extends DCLogic {
     const q = this.proj(wx, wy, 0.14, cx0, cy0, sc);
     x.fillStyle = '#1d1d1f'; x.beginPath(); x.arc(q[0], q[1], 9, 0, 7); x.fill();
   }
+  // Heat spots rendered as an additive glow layer + crisp cores. Because the glow
+  // uses 'lighter' compositing, overlapping points sum up — so wherever attribution
+  // piles up (denser regions, or later/more trials) the field glows brighter. glowBoost
+  // scales that with how much has accumulated so far.
+  paintHeat(x, pts, cx0, cy0, sc, coreAlpha, glowBoost) {
+    x.globalCompositeOperation = 'lighter';
+    for (const p of pts) {
+      const q = this.proj(p.x, p.y, p.z, cx0, cy0, sc);
+      const gr = 5 + 12 * p.w, ga = (0.05 + 0.11 * p.w) * glowBoost;
+      const grd = x.createRadialGradient(q[0], q[1], 0, q[0], q[1], gr);
+      grd.addColorStop(0, this.heat(1, ga));
+      grd.addColorStop(0.45, this.heat(p.w, ga * 0.4));
+      grd.addColorStop(1, this.heat(0.35, 0));
+      x.fillStyle = grd; x.beginPath(); x.arc(q[0], q[1], gr, 0, 7); x.fill();
+    }
+    x.globalCompositeOperation = 'source-over';
+    for (const p of pts) {
+      const q = this.proj(p.x, p.y, p.z, cx0, cy0, sc);
+      x.fillStyle = this.heat(p.w, coreAlpha(p));
+      x.beginPath(); x.arc(q[0], q[1], 1.6 + 2.4 * p.w, 0, 7); x.fill();
+    }
+  }
   drawField() {
     const c = this.cv.field; if (!c) return; const x = c.getContext('2d');
     x.clearRect(0, 0, 1000, 540);
     const cx0 = 500, cy0 = 340, sc = 92;
     const t = this.ft;
     this.drawArena(x, cx0, cy0, sc, () => {
-      for (const p of this.fieldPts) {
-        if (p.t > t) continue;
-        const q = this.proj(p.x, p.y, p.z, cx0, cy0, sc);
-        x.fillStyle = this.heat(p.w, 0.06 + 0.3 * p.w);
-        x.beginPath(); x.arc(q[0], q[1], 1.6 + 2.6 * p.w, 0, 7); x.fill();
-      }
+      const vis = this.fieldPts.filter(p => p.t <= t);
+      this.paintHeat(x, vis, cx0, cy0, sc, p => 0.06 + 0.3 * p.w, 0.4 + 0.6 * t);
       this.drawTraj(x, cx0, cy0, sc, t);
     });
     if (t > 0.55) {
@@ -1247,16 +1335,14 @@ class Component extends DCLogic {
   drawConv() {
     const c = this.cv.conv; if (!c) return; const x = c.getContext('2d');
     x.clearRect(0, 0, 1000, 400);
-    const saveY = this.fYaw, saveE = this.fElev; this.fYaw = 0.7; this.fElev = 0.95;
+    const saveY = this.fYaw, saveE = this.fElev; this.fYaw = this.cvYaw; this.fElev = this.cvElev;
     const cx0 = 500, cy0 = 262, sc = 68;
     const n = this.state.convN;
     const alpha = Math.max(0.10, 0.3 - n * 0.01);
     this.drawArena(x, cx0, cy0, sc, () => {
-      for (let i = 0; i < n; i++) for (const p of this.convTrials[i]) {
-        const q = this.proj(p.x, p.y, p.z, cx0, cy0, sc);
-        x.fillStyle = this.heat(p.w, alpha * (0.4 + 0.6 * p.w));
-        x.beginPath(); x.arc(q[0], q[1], 1.8 + 2.4 * p.w, 0, 7); x.fill();
-      }
+      const pts = [];
+      for (let i = 0; i < n; i++) for (const p of this.convTrials[i]) pts.push(p);
+      this.paintHeat(x, pts, cx0, cy0, sc, p => alpha * (0.4 + 0.6 * p.w), 0.35 + 0.65 * (n / 20));
     });
     x.fillStyle = this.C.mut; x.font = this.fnt('400', 11); x.textBaseline = 'top';
     x.fillText(n < 4 ? 'speckle — could be anywhere' : n < 12 ? 'a pattern is forming…' : 'converged: target face + approach corridor, everywhere else quiet', 24, 20);
@@ -1278,7 +1364,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state;
-    const { blue, green, red } = this.C;
+    const { blue, green, red, yellow } = this.C;
     const heroPrompt = s.heroPrompt ?? (this.props.defaultPrompt ?? 'friendly');
     const hero = heroPrompt === 'friendly'
       ? { plain: 'https://isahalim.github.io/friendly_combo_plain.gif', sal: 'https://isahalim.github.io/friendly_combo_saliency.gif' }
@@ -1307,25 +1393,25 @@ class Component extends DCLogic {
         simRows.push(this.mkBar('RED', cts.red / cts.n * 100, rl, rh, red));
       }
       const [ll, lh] = this.wilson(cts.left, cts.n);
-      simRows.push(this.mkBar('LEFT', cts.left / cts.n * 100, ll, lh, blue));
+      simRows.push(this.mkBar('LEFT', cts.left / cts.n * 100, ll, lh, yellow));
       const [el0, eh] = this.wilson(cts.reach, cts.n);
       simRows.push(this.mkBar('REACH', cts.reach / cts.n * 100, el0, eh, green));
     }
     let resultRows;
     if (s.resView === 'pooled') {
       resultRows = [
-        { label: '“go to the friendly one”', sub: 'pooled · n=100', bars: [this.mkBar('RED', 30, 22, 40, red, ' · p=7.9e-5'), this.mkBar('LEFT', 74, 65, 82, blue, ' · p=1.7e-6')] },
-        { label: '“go to the hostile one”', sub: 'pooled · n=100', bars: [this.mkBar('RED', 50, 40, 60, red, ' · p=1.0'), this.mkBar('LEFT', 58, 48, 67, blue, ' · p=0.133')] },
-        { label: 'control · identical targets', sub: 'pooled · n=100', bars: [this.mkBar('LEFT', 87, 79, 92, blue, ' · p=1.3e-14')] },
+        { label: '“go to the friendly one”', sub: 'pooled · n=100', bars: [this.mkBar('RED', 30, 22, 40, red, ' · p=7.9e-5'), this.mkBar('LEFT', 74, 65, 82, yellow, ' · p=1.7e-6')] },
+        { label: '“go to the hostile one”', sub: 'pooled · n=100', bars: [this.mkBar('RED', 50, 40, 60, red, ' · p=1.0'), this.mkBar('LEFT', 58, 48, 67, yellow, ' · p=0.133')] },
+        { label: 'control · identical targets', sub: 'pooled · n=100', bars: [this.mkBar('LEFT', 87, 79, 92, yellow, ' · p=1.3e-14')] },
       ];
     } else {
       resultRows = [
-        { label: 'L=blue · R=red — friendly', sub: 'n=50 · reach 66%', bars: [this.mkBar('RED', 6, 2, 16, red), this.mkBar('LEFT', 94, 84, 98, blue)] },
-        { label: 'L=blue · R=red — hostile', sub: 'n=50 · reach 54%', bars: [this.mkBar('RED', 42, 29, 56, red), this.mkBar('LEFT', 58, 44, 71, blue)] },
-        { label: 'L=red · R=blue — friendly', sub: 'n=50 · reach 62%', bars: [this.mkBar('RED', 54, 40, 67, red), this.mkBar('LEFT', 54, 40, 67, blue)] },
-        { label: 'L=red · R=blue — hostile', sub: 'n=50 · reach 46%', bars: [this.mkBar('RED', 58, 44, 71, red), this.mkBar('LEFT', 58, 44, 71, blue)] },
-        { label: 'L=red · R=red — friendly', sub: 'control · n=50 · reach 78%', bars: [this.mkBar('LEFT', 96, 87, 99, blue)] },
-        { label: 'L=red · R=red — hostile', sub: 'control · n=50 · reach 64%', bars: [this.mkBar('LEFT', 78, 65, 87, blue)] },
+        { label: 'L=blue · R=red — friendly', sub: 'n=50 · reach 66%', bars: [this.mkBar('RED', 6, 2, 16, red), this.mkBar('LEFT', 94, 84, 98, yellow)] },
+        { label: 'L=blue · R=red — hostile', sub: 'n=50 · reach 54%', bars: [this.mkBar('RED', 42, 29, 56, red), this.mkBar('LEFT', 58, 44, 71, yellow)] },
+        { label: 'L=red · R=blue — friendly', sub: 'n=50 · reach 62%', bars: [this.mkBar('RED', 54, 40, 67, red), this.mkBar('LEFT', 54, 40, 67, yellow)] },
+        { label: 'L=red · R=blue — hostile', sub: 'n=50 · reach 46%', bars: [this.mkBar('RED', 58, 44, 71, red), this.mkBar('LEFT', 58, 44, 71, yellow)] },
+        { label: 'L=red · R=red — friendly', sub: 'control · n=50 · reach 78%', bars: [this.mkBar('LEFT', 96, 87, 99, yellow)] },
+        { label: 'L=red · R=red — hostile', sub: 'control · n=50 · reach 64%', bars: [this.mkBar('LEFT', 78, 65, 87, yellow)] },
       ];
     }
     return {
@@ -1342,7 +1428,7 @@ class Component extends DCLogic {
       ref2d: this.ref2d,
       refField: this.refField, fieldDown: this.fieldDown, fieldT: s.fieldT, setFieldT: this.setFieldT,
       fieldPlayToggle: this.fieldPlayToggle, fieldPlayLabel: s.fieldPlaying ? 'Pause' : 'Replay trial',
-      refConv: this.refConv, convN: s.convN, setConvN: this.setConvN,
+      refConv: this.refConv, convDown: this.convDown, convN: s.convN, setConvN: this.setConvN,
       navCagent: navC('agent'), navWagent: navW('agent'),
       navCexperiment: navC('experiment'), navWexperiment: navW('experiment'),
       navCsaliency: navC('saliency'), navWsaliency: navW('saliency'),
@@ -1366,6 +1452,7 @@ class Component extends DCLogic {
       convImgSrc, convImgCaption,
       scrollToTop: this.scrollToTop,
       reachVidSrc: (this.vidUrls && this.vidUrls.reach) || '', driftVidSrc: (this.vidUrls && this.vidUrls.drift) || '',
+      playSafari: this.playSafari,
     };
   }
 }

@@ -1107,17 +1107,8 @@
       if (window.Babel) return Promise.resolve();
       if (babelLoading) return babelLoading;
       const babel = cdnScriptFor(BABEL_URL, BABEL_SRI);
-      babelLoading = new Promise((res, rej) => {
-        const s = document.createElement("script");
-        s.src = babel.src;
-        if (babel.integrity) {
-          s.integrity = babel.integrity;
-          s.crossOrigin = "anonymous";
-        }
-        s.onload = () => res();
-        s.onerror = rej;
-        document.head.appendChild(s);
-      });
+      babelLoading = loadScript(babel.src, babel.integrity)
+        .catch(() => loadScript("https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"));
       return babelLoading;
     }
     const pending = /* @__PURE__ */ new Map();
@@ -1761,7 +1752,18 @@
       }
       s.async = false;
       s.onload = () => resolve2();
-      s.onerror = () => reject(new Error(`failed to load ${src}`));
+      s.onerror = () => {
+        if (integrity) {
+          const fb = document.createElement("script");
+          fb.src = src;
+          fb.async = false;
+          fb.onload = () => resolve2();
+          fb.onerror = () => reject(new Error(`failed to load ${src}`));
+          document.head.appendChild(fb);
+        } else {
+          reject(new Error(`failed to load ${src}`));
+        }
+      };
       document.head.appendChild(s);
     });
   }
@@ -1770,10 +1772,11 @@
     if (w.React && w.ReactDOM) return Promise.resolve();
     const react = cdnScriptFor(REACT_URL, REACT_SRI);
     const reactDom = cdnScriptFor(REACT_DOM_URL, REACT_DOM_SRI);
-    return Promise.all([
-      loadScript(react.src, react.integrity),
-      loadScript(reactDom.src, reactDom.integrity)
-    ]).then(() => void 0);
+    return loadScript(react.src, react.integrity)
+      .catch(() => loadScript("https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"))
+      .then(() => loadScript(reactDom.src, reactDom.integrity))
+      .catch(() => loadScript("https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"))
+      .then(() => void 0);
   }
   function init() {
     const runtime = createRuntime(document);
