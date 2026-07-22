@@ -22,12 +22,21 @@
 
   // src/parse.ts
   function parseDcDocument(doc) {
-    const dc = doc.querySelector("x-dc");
-    if (!dc) return null;
+    const tplScript = doc.querySelector("script[data-dc-template]") || doc.querySelector("script[type='text/x-dc-template']");
     const scriptEl = doc.querySelector("script[data-dc-script]");
     const { props, preview } = parseDataProps(
       scriptEl?.getAttribute("data-props") ?? null
     );
+    if (tplScript && tplScript.textContent) {
+      return {
+        template: tplScript.textContent,
+        js: scriptEl ? scriptEl.textContent || "" : "",
+        props,
+        preview
+      };
+    }
+    const dc = doc.querySelector("x-dc");
+    if (!dc) return null;
     return {
       template: dc.innerHTML,
       js: scriptEl ? scriptEl.textContent || "" : "",
@@ -36,6 +45,21 @@
     };
   }
   function parseDcText(src) {
+    const tplMatch = /<script\b[^>]*type=["']text\/x-dc-template["'][^>]*>([\s\S]*?)<\/script>/i.exec(src)
+      || /<script\b[^>]*data-dc-template[^>]*>([\s\S]*?)<\/script>/i.exec(src);
+    if (tplMatch) {
+      const doc = new DOMParser().parseFromString(src, "text/html");
+      const scriptEl = doc.querySelector("script[data-dc-script]");
+      const { props, preview } = parseDataProps(
+        scriptEl?.getAttribute("data-props") ?? null
+      );
+      return {
+        template: tplMatch[1],
+        js: scriptEl ? scriptEl.textContent || "" : "",
+        props,
+        preview
+      };
+    }
     const openMatch = /<x-dc(?:\s[^>]*)?>/.exec(src);
     if (!openMatch) return null;
     const close = src.lastIndexOf("</x-dc>");
