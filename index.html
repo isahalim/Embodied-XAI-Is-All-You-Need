@@ -103,7 +103,7 @@
       <nav
         style="pointer-events:auto;display:flex;gap:22px;align-items:center;padding:10px 24px;border-radius:999px;background:rgba(255,255,255,.75);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 28px rgba(31,38,60,.12);flex-wrap:wrap;justify-content:center;">
         <a href="#" onClick="{{scrollToTop}}"
-          style="font-weight:800;font-size:13px;letter-spacing:.06em;color:#1d1d1f;text-decoration:none;cursor:pointer;">Embodied&nbsp;XAI</a>
+          style="color:{{navCtop}};text-decoration:none;font-size:13px;font-weight:{{navWtop}};letter-spacing:.06em;transition:color 0.2s ease, font-weight 0.2s ease;cursor:pointer;">Embodied&nbsp;XAI</a>
         <a href="#agent"
           style="color:{{navCagent}};text-decoration:none;font-size:13px;font-weight:{{navWagent}};transition:color 0.2s ease, font-weight 0.2s ease;">The
           agent</a>
@@ -490,9 +490,11 @@
           style="margin:0;background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(1.7);-webkit-backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 12px 40px rgba(31,38,60,.07);overflow:hidden;padding:18px;display:flex;flex-direction:column;gap:10px;">
           <div style="font-size:11px;font-weight:700;letter-spacing:.05em;color:#6e6e73;">UNPROJECTED — ONE SHARED WORLD
           </div>
-          <img src="uploads/t_converge_friendly_20_blue_right.png"
-            alt="Real 4D heat field: every query from 20 trials unprojected into one shared world"
-            style="width:100%;flex:1;object-fit:contain;min-height:0;">
+          <div style="flex:1;min-height:0;position:relative;width:100%;">
+            <img src="uploads/t_converge_friendly_20_blue_right.png"
+              alt="Real 4D heat field: every query from 20 trials unprojected into one shared world"
+              style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+          </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;">The real implementation: every query from <strong>n = 20
               trials</strong> lands on the same floor and back wall in world coordinates. Gray curves are agent
             trajectories; the hot wall region is accumulated background influence no single frame could reveal.</p>
@@ -735,7 +737,7 @@ class Component extends DCLogic {
   state = { heroPrompt: null, showTap: true, simPrompt: 'friendly',
     counts: { n: 0, red: 0, left: 0, reach: 0 },
     resView: 'pooled', igStep: 8, igPlaying: false, fieldT: 1, fieldPlaying: false, convN: 1,
-    fieldView: 'stylized', convView: 'stylized', navHidden: false, activeNav: '' };
+    fieldView: 'stylized', convView: 'stylized', navHidden: false, activeNav: 'top' };
 
   cv = {};
   C = { ink: '#1d1d1f', mut: '#6e6e73', blue: '#0A84FF', green: '#34C759', red: '#FF3B30', yellow: '#FFCC00' };
@@ -804,11 +806,11 @@ class Component extends DCLogic {
 
       const isAtBottom = (windowHeight + scrollPosition) >= (documentHeight - 60);
 
-      let act = '';
+      let act = 'top';
       if (isAtBottom) {
         act = 'links';
       } else if (scrollPosition < 150) {
-        act = '';
+        act = 'top';
       } else {
         const ids = ['agent', 'experiment', 'saliency', 'diagnostics', 'links'];
         const triggerPoint = 220;
@@ -1063,36 +1065,136 @@ class Component extends DCLogic {
     x.fillText(ctrl ? 'control: both targets red' : (lastArr === 0 ? 'arrangement: L=blue · R=red (mirrors next trial)' : 'arrangement: L=red · R=blue (mirrors next trial)'), 24, 430);
   }
 
+  // ---------- shared pinhole camera ----------
+  // World frame is the one §07 already uses: x right, y forward from the spawn point,
+  // z up; targets at (±1.2, 3.0), back wall at y = 4.4. A camera is
+  // {pos:[x,y,z], yaw, pitch, roll, fov}; yaw 0 looks down +y, and every render below
+  // is a true perspective projection through it — so moving the camera moves the
+  // targets exactly the way a walking robot's head would.
+  camBasis(cam) {
+    const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+    const r = [cy, -sy, 0], f0 = [sy, cy, 0], u0 = [0, 0, 1];
+    const cp = Math.cos(cam.pitch || 0), sp = Math.sin(cam.pitch || 0);
+    const f = [f0[0] * cp + u0[0] * sp, f0[1] * cp + u0[1] * sp, f0[2] * cp + u0[2] * sp];
+    const u1 = [u0[0] * cp - f0[0] * sp, u0[1] * cp - f0[1] * sp, u0[2] * cp - f0[2] * sp];
+    const cr = Math.cos(cam.roll || 0), sr = Math.sin(cam.roll || 0);
+    const r2 = [r[0] * cr + u1[0] * sr, r[1] * cr + u1[1] * sr, r[2] * cr + u1[2] * sr];
+    const u = [u1[0] * cr - r[0] * sr, u1[1] * cr - r[1] * sr, u1[2] * cr - r[2] * sr];
+    return { f, r: r2, u };
+  }
+  camView(V, cam, p) {
+    const a = p[0] - cam.pos[0], b = p[1] - cam.pos[1], c = (p[2] || 0) - cam.pos[2];
+    return [a * V.r[0] + b * V.r[1] + c * V.r[2], a * V.u[0] + b * V.u[1] + c * V.u[2], a * V.f[0] + b * V.f[1] + c * V.f[2]];
+  }
+  camPix(v, VP) {
+    const z = Math.max(1e-4, v[2]);
+    return [VP.cx + VP.fl * v[0] / z, VP.cy - VP.fl * v[1] / z];
+  }
+  // Sutherland–Hodgman against the near plane, in camera coordinates: without it a
+  // polygon straddling the camera (the floor always does) projects inside-out.
+  clipNear(poly, near) {
+    const out = [];
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const ain = a[2] > near, bin = b[2] > near;
+      if (ain) out.push(a);
+      if (ain !== bin) { const t = (near - a[2]) / (b[2] - a[2]); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, near]); }
+    }
+    return out;
+  }
+  fillFace(x, camPts, VP, stroke) {
+    const cl = this.clipNear(camPts, VP.near); if (cl.length < 3) return;
+    const px = cl.map(p => this.camPix(p, VP));
+    x.beginPath(); x.moveTo(px[0][0], px[0][1]);
+    for (let i = 1; i < px.length; i++) x.lineTo(px[i][0], px[i][1]);
+    x.closePath(); x.fill(); if (stroke) x.stroke();
+  }
+  strokeSeg(x, a, b, VP) {
+    let p = a, q = b; const n = VP.near;
+    if (p[2] <= n && q[2] <= n) return;
+    if (p[2] <= n) { const t = (n - p[2]) / (q[2] - p[2]); p = [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, n]; }
+    else if (q[2] <= n) { const t = (n - q[2]) / (p[2] - q[2]); q = [q[0] + (p[0] - q[0]) * t, q[1] + (p[1] - q[1]) * t, n]; }
+    const A = this.camPix(p, VP), B = this.camPix(q, VP);
+    x.beginPath(); x.moveTo(A[0], A[1]); x.lineTo(B[0], B[1]); x.stroke();
+  }
+  roomCubes() {
+    return [{ key: 'r', c: [-1.2, 3.0], s: 0.54, rgb: [255, 59, 48] },
+    { key: 'b', c: [1.2, 3.0], s: 0.54, rgb: [10, 132, 255] }];
+  }
+  // Renders the arena through `cam`. `tint` fades the whole scene toward black for the
+  // IG baseline sweep. Returns a projector plus the on-screen footprint of each cube so
+  // heat blobs can be pinned to what this camera actually sees.
+  drawWorld(x, ox, oy, w, h, cam, opts) {
+    const o = opts || {};
+    const cl = (v) => Math.max(0, Math.min(255, Math.round(v)));
+    const tint = o.tint || ((r, g, b) => `rgb(${cl(r)},${cl(g)},${cl(b)})`);
+    const V = this.camBasis(cam);
+    const VP = { cx: ox + w / 2, cy: oy + h / 2, fl: (w / 2) / Math.tan((cam.fov || 1.05) / 2), near: 0.06 };
+    const cv = (p) => this.camView(V, cam, p);
+    const q = (pts) => pts.map(cv);
+    x.lineJoin = 'round';
+    // sky, then a floor quad large enough that its far edge sits on the horizon
+    x.fillStyle = tint(228, 233, 240); x.fillRect(ox, oy, w, h);
+    x.fillStyle = tint(203, 209, 218);
+    this.fillFace(x, q([[-400, -400, 0], [400, -400, 0], [400, 400, 0], [-400, 400, 0]]), VP);
+    // floor grid — the strongest cue for how the camera is standing. The arena is open
+    // ground (no back wall in the actual trials), so it just runs out to the horizon.
+    x.strokeStyle = tint(176, 183, 194); x.lineWidth = 1;
+    for (let gx = -9; gx <= 9; gx++) this.strokeSeg(x, cv([gx, -9, 0]), cv([gx, 12, 0]), VP);
+    for (let gy = -9; gy <= 12; gy++) this.strokeSeg(x, cv([-9, gy, 0]), cv([9, gy, 0]), VP);
+    const cubes = o.cubes || this.roomCubes();
+    const L = [-0.42, -0.5, 0.76];
+    const foot = {};
+    // contact shadows first, then cubes painted far to near
+    x.fillStyle = 'rgba(20,24,32,.16)';
+    for (const cb of cubes) {
+      const [cx0, cy0] = cb.c, e = cb.s * 0.62;
+      this.fillFace(x, q([[cx0 - e, cy0 - e, 0.002], [cx0 + e, cy0 - e, 0.002], [cx0 + e, cy0 + e, 0.002], [cx0 - e, cy0 + e, 0.002]]), VP);
+    }
+    const order = cubes.map(cb => ({ cb, d: cv([cb.c[0], cb.c[1], cb.s / 2])[2] })).sort((a, b) => b.d - a.d);
+    for (const { cb } of order) {
+      const [cx0, cy0] = cb.c, s = cb.s / 2, hh = cb.s;
+      const P = (i, j, k) => [cx0 + i * s, cy0 + j * s, k * hh];
+      const V8 = [P(-1, -1, 0), P(1, -1, 0), P(1, 1, 0), P(-1, 1, 0), P(-1, -1, 1), P(1, -1, 1), P(1, 1, 1), P(-1, 1, 1)];
+      const faces = [
+        { i: [4, 5, 6, 7], n: [0, 0, 1], c: [cx0, cy0, hh] },
+        { i: [0, 1, 5, 4], n: [0, -1, 0], c: [cx0, cy0 - s, hh / 2] },
+        { i: [1, 2, 6, 5], n: [1, 0, 0], c: [cx0 + s, cy0, hh / 2] },
+        { i: [2, 3, 7, 6], n: [0, 1, 0], c: [cx0, cy0 + s, hh / 2] },
+        { i: [3, 0, 4, 7], n: [-1, 0, 0], c: [cx0 - s, cy0, hh / 2] },
+      ];
+      const vis = [];
+      for (const fc of faces) {
+        const d = [fc.c[0] - cam.pos[0], fc.c[1] - cam.pos[1], fc.c[2] - cam.pos[2]];
+        if (fc.n[0] * d[0] + fc.n[1] * d[1] + fc.n[2] * d[2] >= 0) continue; // back-facing
+        const pts = fc.i.map(k => cv(V8[k]));
+        vis.push({ fc, pts, d: (pts[0][2] + pts[1][2] + pts[2][2] + pts[3][2]) / 4 });
+      }
+      vis.sort((a, b) => b.d - a.d);
+      for (const f of vis) {
+        const lam = Math.max(0, f.fc.n[0] * L[0] + f.fc.n[1] * L[1] + f.fc.n[2] * L[2]);
+        const k = 0.6 + 0.55 * lam;
+        x.fillStyle = tint(cb.rgb[0] * k, cb.rgb[1] * k, cb.rgb[2] * k);
+        x.strokeStyle = tint(cb.rgb[0] * k * 0.72, cb.rgb[1] * k * 0.72, cb.rgb[2] * k * 0.72);
+        x.lineWidth = 1;
+        this.fillFace(x, f.pts, VP, true);
+      }
+      // screen footprint of the visible corners
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, dep = 0, n = 0;
+      for (const v of V8) { const p = cv(v); if (p[2] <= VP.near) continue; const s2 = this.camPix(p, VP); x0 = Math.min(x0, s2[0]); x1 = Math.max(x1, s2[0]); y0 = Math.min(y0, s2[1]); y1 = Math.max(y1, s2[1]); dep += p[2]; n++; }
+      if (n) foot[cb.key] = { x: (x0 + x1) / 2, y: (y0 + y1) / 2, rad: Math.max(x1 - x0, y1 - y0) / 2, depth: dep / n };
+    }
+    return { cubes: foot, fl: VP.fl, at: (p) => { const v = cv(p); const s2 = this.camPix(v, VP); return { x: s2[0], y: s2[1], depth: v[2] }; } };
+  }
+
   // ---------- IG ----------
   setIgStep = (e) => this.setState({ igStep: +e.target.value, igPlaying: false });
   igPlayToggle = () => this.setState(s => ({ igPlaying: !s.igPlaying }));
+  igCam = { pos: [0, -0.6, 0.95], yaw: 0.01, pitch: -0.13, roll: 0, fov: 1.15 };
   drawScene(x, ox, oy, w, h, br) {
-    const lerp = (a, b) => Math.round(a + (b - a) * br);
-    const col = (r, g, b) => `rgb(${lerp(10, r)},${lerp(10, g)},${lerp(10, b)})`;
-    const horizon = oy + h * 0.5, base = oy + h * 0.8, s = h * 0.26;
-    const vpx = ox + w / 2, vpy = horizon;
-    x.fillStyle = col(233, 237, 243); x.fillRect(ox, oy, w, horizon - oy);
-    x.fillStyle = col(206, 211, 219); x.fillRect(ox, horizon, w, oy + h - horizon);
-    x.lineJoin = 'round';
-    const cube = (fxc, r, g, b) => {
-      const fx = ox + fxc * w - s / 2, fy = base - s;
-      const innerX = fxc < 0.5 ? fx + s : fx;
-      const k = Math.min(0.5, (s * 0.34) / Math.abs(vpx - innerX));
-      const twd = (px, py) => [px + (vpx - px) * k, py + (vpy - py) * k];
-      const [sx1, sy1] = twd(innerX, fy), [sx2, sy2] = twd(innerX, fy + s);
-      x.lineJoin = 'round';
-      // inner side face (camera sits between the targets)
-      x.fillStyle = col(r * 0.68, g * 0.68, b * 0.68);
-      x.beginPath(); x.moveTo(innerX, fy); x.lineTo(innerX, fy + s); x.lineTo(sx2, sy2); x.lineTo(sx1, sy1); x.closePath(); x.fill();
-      // top face sliver
-      const [tx1, ty1] = twd(fx, fy), [tx2, ty2] = twd(fx + s, fy);
-      x.fillStyle = col(Math.min(255, r + 45), Math.min(255, g + 45), Math.min(255, b + 45));
-      x.beginPath(); x.moveTo(fx, fy); x.lineTo(fx + s, fy); x.lineTo(tx2, ty2); x.lineTo(tx1, ty1); x.closePath(); x.fill();
-      // front face: rounded on the outer corners, flush where the side face meets it
-      x.fillStyle = col(r, g, b); x.beginPath();
-      x.roundRect(fx, fy, s, s, fxc < 0.5 ? [9, 0, 0, 9] : [0, 9, 9, 0]); x.fill();
-    };
-    cube(0.26, 10, 132, 255); cube(0.74, 255, 59, 48);
+    const lerp = (a, b) => a + (b - a) * br;
+    const tint = (r, g, b) => `rgb(${Math.round(lerp(9, r))},${Math.round(lerp(9, g))},${Math.round(lerp(9, b))})`;
+    return this.drawWorld(x, ox, oy, w, h, this.igCam, { tint });
   }
   drawIg() {
     const c = this.cv.ig; if (!c) return; const x = c.getContext('2d');
@@ -1107,14 +1209,19 @@ class Component extends DCLogic {
     };
     panel(30, () => this.drawScene(x, 30, 48, 440, 300, a));
     panel(530, () => {
-      this.drawScene(x, 530, 48, 440, 300, 0.2);
+      const sc = this.drawScene(x, 530, 48, 440, 300, 0.2);
       const blob = (bx, by, r, str) => { const grd = x.createRadialGradient(bx, by, 0, bx, by, r); grd.addColorStop(0, this.heat(1, 0.85 * str)); grd.addColorStop(1, this.heat(0.3, 0)); x.fillStyle = grd; x.beginPath(); x.arc(bx, by, r, 0, 7); x.fill(); };
       if (k > 0) {
-        const s = a;
-        blob(530 + 440 * 0.26, 48 + 300 * 0.67, 64 * (0.5 + s * 0.5), s);
-        blob(530 + 440 * 0.26, 48 + 300 * 0.8, 42, s * 0.55);
-        blob(530 + 440 * 0.74, 48 + 300 * 0.68, 34, s * 0.25);
-        blob(530 + 440 * 0.48, 48 + 300 * 0.88, 55, s * 0.3);
+        const s = a, B = sc.cubes.b, R2 = sc.cubes.r;
+        // pinned to world positions, so the heat sits on the surfaces the camera saw
+        const world = (p, wid, str) => { const q = sc.at(p); if (q.depth > 0.1) blob(q.x, q.y, wid * sc.fl / q.depth, str); };
+        if (B) blob(B.x, B.y, B.rad * 1.5 * (0.6 + s * 0.4), s);
+        world([1.2, 2.2, 0.02], 0.55, s * 0.55);
+        if (R2) blob(R2.x, R2.y, R2.rad * 1.1, s * 0.25);
+        world([0.2, 1.8, 0.02], 0.7, s * 0.3);
+        // diffuse background influence out at the horizon — no wall, but the credit
+        // still lands there, exactly as it accumulates in the §07 field
+        const hz = sc.at([0.4, 14, 0.2]); if (hz.depth > 0.1) blob(hz.x, hz.y, 120, s * 0.22);
       }
     });
     x.fillStyle = this.C.ink; x.font = this.fnt('400', 12);
@@ -1133,46 +1240,34 @@ class Component extends DCLogic {
     x.textBaseline = 'top'; x.textAlign = 'left';
     x.fillStyle = this.C.mut; x.font = this.fnt('700', 11);
     x.fillText('PER-FRAME 2D — EVERY QUERY ITS OWN COORDINATES', 30, 20);
-    // roll = onboard camera tilt (deg) — the robot's head bobs and rolls as it walks,
-    // so the horizon is rarely level; some frames are steady, others clearly canted.
+    // Nine real camera poses along one walk: the planner is re-queried while the body
+    // moves, so each frame is the same two targets rendered through a different
+    // position, heading, pitch and roll — different faces, different scale, sometimes
+    // out of view entirely. Only the pose changes; the world is identical.
     const specs = [
-      { b: .72, r: .30, sc: 1.0, heat: 'b', roll: 0, lab: 'both in frame' },
-      { b: .50, r: null, sc: 2.4, heat: 'b', roll: 7, lab: 'close-up — camera rolled mid-stride' },
-      { b: .97, r: .45, sc: 1.1, heat: 'b', roll: -4, lab: 'blue almost cropped out' },
-      { b: .80, r: .20, sc: .7, heat: 'floor', roll: 9, lab: 'heat on the floor, not a target' },
-      { b: .75, r: .25, sc: 1.0, heat: 'r', roll: -6, lab: 'flipped — heat on red this query' },
-      { b: .88, r: .34, sc: .9, heat: 'b', roll: 0, lab: 'both in frame' },
-      { b: null, r: .5, sc: 2.1, heat: 'none', roll: 5, lab: 'close-up — only red, no heat' },
-      { b: .65, r: .15, sc: .8, heat: 'hor', roll: -9, lab: 'canted — horizon runs downhill' },
-      { b: .70, r: .28, sc: 1.2, heat: 'b', roll: 3, lab: 'both in frame' },
+      { cam: { pos: [0, -0.4, 0.9], yaw: 0, pitch: -0.10, roll: 0.02, fov: 1.1 }, heat: 'b', lab: 'both in frame — head-on' },
+      { cam: { pos: [0.6, 1.0, 0.86], yaw: 0.22, pitch: -0.14, roll: 0.14, fov: 0.95 }, heat: 'b', lab: 'closer — camera rolled mid-stride' },
+      { cam: { pos: [1.6, 1.2, 0.9], yaw: -0.55, pitch: -0.08, roll: -0.09, fov: 1.05 }, heat: 'b', lab: 'stepped right — red at the edge' },
+      { cam: { pos: [0.3, 1.5, 0.85], yaw: 0.1, pitch: -0.5, roll: 0.16, fov: 1.05 }, heat: 'floor', pt: [0.6, 2.3, 0.02], lab: 'head down — heat on the floor' },
+      { cam: { pos: [3.4, 4.2, 0.88], yaw: -1.9, pitch: -0.09, roll: -0.1, fov: 1.05 }, heat: 'b', lab: 'walked past — targets side-on' },
+      { cam: { pos: [-2.6, 1.6, 0.9], yaw: 0.66, pitch: -0.10, roll: 0.07, fov: 1.05 }, heat: 'r', lab: 'swung left — heat on red this query' },
+      { cam: { pos: [1.5, 1.0, 0.82], yaw: -0.13, pitch: -0.16, roll: 0.12, fov: 0.7 }, heat: 'none', lab: 'close-up — only blue, no heat' },
+      { cam: { pos: [-0.6, 1.2, 0.95], yaw: 0.06, pitch: -0.07, roll: -0.18, fov: 1.05 }, heat: 'horizon', pt: [-0.3, 11, 0.28], lab: 'canted — heat on the horizon' },
+      { cam: { pos: [0, 4.3, 0.9], yaw: 3.14, pitch: -0.12, roll: 0.05, fov: 1.7 }, heat: 'b', lab: 'turned around — frame mirrored' },
     ];
-    const R = this.mul(7);
     for (let i = 0; i < 9; i++) {
       const col = i % 3, row = Math.floor(i / 3);
       const fx = 30 + col * 196, fy = 52 + row * 130, fw = 182, fh = 112;
-      const jy = (R() - 0.5), jh = R();
       const sp = specs[i];
       if (i >= shown) { x.strokeStyle = 'rgba(29,29,31,.2)'; x.setLineDash([3, 4]); x.beginPath(); x.roundRect(fx, fy, fw, fh, 10); x.stroke(); x.setLineDash([]); continue; }
       x.save(); x.beginPath(); x.roundRect(fx, fy, fw, fh, 10); x.clip();
-      x.fillStyle = '#e6e9ee'; x.fillRect(fx, fy, fw, fh);
-      const hor = fy + fh * (0.42 + jy * 0.14);
-      // tilt the scene by the camera roll; the frame itself stays rectangular, so the
-      // horizon runs at an angle across it. Oversize the ground fill so the rotated
-      // corners still cover the clipped frame.
-      const roll = (sp.roll || 0) * Math.PI / 180;
-      x.save();
-      const cxF = fx + fw / 2, cyF = fy + fh / 2;
-      x.translate(cxF, cyF); x.rotate(roll); x.translate(-cxF, -cyF);
-      x.fillStyle = '#cdd2da'; x.fillRect(fx - fw, hor, fw * 3, fh * 2);
-      const S = 18 * sp.sc;
-      const cubeM = (cxf, color) => { if (cxf == null) return null; const cx2 = fx + fw * cxf; x.fillStyle = color; x.beginPath(); x.roundRect(cx2 - S / 2, hor - S, S, S, Math.min(6, S * 0.25)); x.fill(); return [cx2, hor - S / 2]; };
-      const rpos = cubeM(sp.r, this.C.red), bpos = cubeM(sp.b, this.C.blue);
+      const sc = this.drawWorld(x, fx, fy, fw, fh, sp.cam);
       const blob = (px, py, r2, a2) => { const g2 = x.createRadialGradient(px, py, 0, px, py, r2); g2.addColorStop(0, this.heat(1, a2)); g2.addColorStop(1, this.heat(0.3, 0)); x.fillStyle = g2; x.beginPath(); x.arc(px, py, r2, 0, 7); x.fill(); };
-      if (sp.heat === 'b' && bpos) blob(bpos[0], bpos[1], S * 1.6, 0.7);
-      if (sp.heat === 'r' && rpos) blob(rpos[0], rpos[1], S * 1.6, 0.65);
-      if (sp.heat === 'floor') blob(fx + fw * (0.3 + jh * 0.4), hor + fh * 0.22, 16, 0.6);
-      if (sp.heat === 'hor') blob(fx + fw * (0.2 + jh * 0.6), hor - 5, 14, 0.55);
-      x.restore();
+      const onCube = (key, a2) => { const f = sc.cubes[key]; if (f) blob(f.x, f.y, Math.max(10, Math.min(fw * 0.42, f.rad * 1.6)), a2); };
+      if (sp.heat === 'b') onCube('b', 0.7);
+      if (sp.heat === 'r') onCube('r', 0.65);
+      // far background accumulation still reads on the horizon even with no wall there
+      if (sp.heat === 'floor' || sp.heat === 'horizon') { const q = sc.at(sp.pt); if (q.depth > 0.1) blob(q.x, q.y, sp.heat === 'horizon' ? fw * 0.13 : 0.45 * sc.fl / q.depth, 0.6); }
       x.restore();
       x.strokeStyle = 'rgba(29,29,31,.2)'; x.lineWidth = 1; x.beginPath(); x.roundRect(fx, fy, fw, fh, 10); x.stroke();
       x.fillStyle = this.C.mut; x.font = this.fnt('400', 9.5); x.fillText(`q${i + 1} — ${sp.lab}`, fx + 4, fy + fh + 5);
@@ -1429,6 +1524,7 @@ class Component extends DCLogic {
       refField: this.refField, fieldDown: this.fieldDown, fieldT: s.fieldT, setFieldT: this.setFieldT,
       fieldPlayToggle: this.fieldPlayToggle, fieldPlayLabel: s.fieldPlaying ? 'Pause' : 'Replay trial',
       refConv: this.refConv, convDown: this.convDown, convN: s.convN, setConvN: this.setConvN,
+      navCtop: navC('top'), navWtop: navW('top'),
       navCagent: navC('agent'), navWagent: navW('agent'),
       navCexperiment: navC('experiment'), navWexperiment: navW('experiment'),
       navCsaliency: navC('saliency'), navWsaliency: navW('saliency'),
