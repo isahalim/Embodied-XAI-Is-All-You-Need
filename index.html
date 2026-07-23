@@ -4,8 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"
+    crossorigin="anonymous"></script>
   <script src="./support.js"></script>
 </head>
 
@@ -1962,7 +1964,7 @@ class Component extends DCLogic {
     x.fillText(`α = ${(a).toFixed(2)} — the frame at ${Math.round(a * 100)}% exposure`, 30, 362);
     x.fillText(k === 0 ? 'no steps yet — no credit assigned' : `sum of gradients over steps 1…${k}, weighted by the fade`, 530, 362);
     x.fillStyle = this.C.mut; x.font = this.fnt('400', 11);
-    x.fillText('target: the sign-inclusive ωz tokens the agent actually sampled, e.g.  { "wz": 0.42 }', 30, 392);
+    x.fillText('target: the sign-inclusive ωz tokens the agent actually sampled, e.g.  { "wz": -0.42 }', 30, 392);
     for (let i = 0; i <= 8; i++) { x.fillStyle = i <= k ? this.C.blue : 'rgba(29,29,31,.15)'; x.beginPath(); x.roundRect(530 + i * 20, 396, 12, 8, 3); x.fill(); }
   }
 
