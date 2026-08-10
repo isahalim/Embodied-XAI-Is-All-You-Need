@@ -1,8 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
 title: >-
-  Embodied XAI Is All You Need: Revealing hidden preferences of
-  vision–language models that leak into quadruped movement using XAI methods
+  Embodied XAI Is All You Need: Tracing Hierarchical VLM–PPO Decisions via 4D Spatio-Temporal Saliency
 authors:
   - family-names: Halim
     given-names: S.

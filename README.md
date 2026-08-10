@@ -1,6 +1,6 @@
 # Embodied XAI Is All You Need
 
-**Revealing hidden preferences of vision–language models that leak into quadruped movement using XAI methods.**
+**Tracing Hierarchical VLM–PPO Decisions via 4D Spatio-Temporal Saliency**
 
 *Explainable AI · Embodied AI — presented by S. Halim (University of Washington)*
 
