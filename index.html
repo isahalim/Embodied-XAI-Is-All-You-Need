@@ -98,6 +98,61 @@
           transform: translateY(1px) scale(0.95) !important;
           opacity: 0.82;
         }
+
+        /* Color bar (glassy ramp, no card) for the real renders (matplotlib turbo, the pipeline's colormap) */
+        .cbar {
+          flex: none;
+          align-self: center;
+          display: flex;
+          align-items: stretch;
+          gap: 7px;
+          height: 210px;
+          padding: 4px 2px;
+          background: transparent;
+          box-sizing: border-box;
+        }
+
+        .cbar-ramp {
+          position: relative;
+          width: 12px;
+          border-radius: 999px;
+          background: linear-gradient(to top, #30123b 0%, #4958dd 10%, #2f9ef5 20%, #27d7c3 30%, #4ef983 40%,
+              #96fa50 50%, #dfdc32 60%, #ffa323 70%, #f45c17 80%, #b82008 90%, #7a0403 100%);
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35), 0 2px 6px rgba(31, 38, 60, .18);
+        }
+
+        .cbar-ramp::after {
+          content: '';
+          position: absolute;
+          top: 4px;
+          bottom: 4px;
+          left: 2px;
+          width: 3px;
+          border-radius: 999px;
+          background: linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, .12));
+        }
+
+        .cbar-ticks {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          font-size: 10px;
+          font-weight: 600;
+          line-height: 1;
+          color: #48484d;
+          font-variant-numeric: tabular-nums;
+        }
+
+        .cbar-label {
+          writing-mode: vertical-rl;
+          transform: rotate(180deg);
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: .03em;
+          color: #6e6e73;
+          text-align: center;
+          white-space: nowrap;
+        }
       </style>
     </helmet>
 
@@ -452,10 +507,13 @@
           style="margin:0;background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(1.7);-webkit-backdrop-filter:blur(24px) saturate(1.7);border:1px solid rgba(255,255,255,.65);border-radius:24px;box-shadow:0 12px 40px rgba(31,38,60,.07);overflow:hidden;padding:18px;display:flex;flex-direction:column;gap:10px;">
           <div style="font-size:11px;font-weight:700;letter-spacing:.05em;color:#6e6e73;">UNPROJECTED · ONE SHARED WORLD
           </div>
-          <div style="flex:1;min-height:0;position:relative;width:100%;">
-            <img src="uploads/t_converge_friendly_20_blue_right.png"
-              alt="Real 4D heat field: every query from 20 trials unprojected into one shared world"
-              style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+          <div style="flex:1;min-height:0;display:flex;align-items:center;gap:12px;">
+            <div style="flex:1;min-width:0;align-self:stretch;position:relative;">
+              <img src="uploads/t_converge_friendly_20_blue_right.png"
+                alt="Real 4D heat field: every query from 20 trials unprojected into one shared world"
+                style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;">
+            </div>
+            <div class="cbar" style="height:180px;" role="img" aria-label="Color scale: accumulated saliency, normalized from 0 (dark blue) to 1 (dark red)"><div class="cbar-ramp"></div><div class="cbar-ticks"><span>1.0</span><span>0.5</span><span>0.0</span></div><div class="cbar-label">accumulated saliency (norm.)</div></div>
           </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;">The real implementation: every query from <strong>n = 20 trials</strong> lands on the same floor and back wall in world coordinates. Gray curves are agent trajectories, and the hot wall region is accumulated background influence that no single frame could reveal.</p>
         </figure>
@@ -561,7 +619,8 @@
             style="width:100%;display:block;cursor:grab;touch-action:none;"></canvas>
         </sc-if>
         <sc-if value="{{cvIsReal}}" hint-placeholder-val="{{false}}">
-          <div style="position:relative;width:100%;height:440px;">
+          <div style="display:flex;align-items:center;gap:12px;padding-right:18px;">
+          <div style="position:relative;flex:1;min-width:0;height:440px;">
             <img src="uploads/t_converge_friendly_1_blue_right.png" alt="Real convergence render, n = 1"
               style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px;box-sizing:border-box;opacity:{{convOp1}};transition:opacity .45s ease;">
             <img src="uploads/t_converge_friendly_5_blue_right.png" alt="Real convergence render, n = 5"
@@ -571,13 +630,16 @@
             <img src="uploads/t_converge_friendly_20_blue_right.png" alt="Real convergence render, n = 20"
               style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:16px;box-sizing:border-box;opacity:{{convOp20}};transition:opacity .45s ease;">
           </div>
+          <div class="cbar" role="img" aria-label="Color scale: accumulated saliency, normalized from 0 (dark blue) to 1 (dark red)"><div class="cbar-ramp"></div><div class="cbar-ticks"><span>1.0</span><span>0.5</span><span>0.0</span></div><div class="cbar-label">accumulated saliency (norm.)</div></div>
+          </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;padding:12px 20px;border-top:1px solid rgba(29,29,31,.08);">
             {{convImgCaption}}</p>
         </sc-if>
         <sc-if value="{{cvIsSplit}}" hint-placeholder-val="{{false}}">
-          <div style="display:flex;justify-content:center;padding:16px;">
+          <div style="display:flex;justify-content:center;align-items:center;gap:16px;padding:16px;">
             <img src="{{convImgSrc}}" alt="Real 4D saliency render"
-              style="max-width:100%;max-height:440px;display:block;">
+              style="max-width:calc(100% - 100px);max-height:440px;display:block;min-width:0;">
+            <div class="cbar" role="img" aria-label="Color scale: accumulated saliency, normalized from 0 (dark blue) to 1 (dark red)"><div class="cbar-ramp"></div><div class="cbar-ticks"><span>1.0</span><span>0.5</span><span>0.0</span></div><div class="cbar-label">accumulated saliency (norm.)</div></div>
           </div>
           <p style="font-size:12px;color:#6e6e73;margin:0;padding:12px 20px;border-top:1px solid rgba(29,29,31,.08);">
             {{convImgCaption}}</p>
@@ -596,6 +658,7 @@
         <p>The field supports two more tools. <strong>Outcome-split fields</strong> pool trials by what the agent did (nearer red versus nearer blue, reached versus drifted), which isolates the attention signature of each choice and of failure. <strong>Time-resolved accumulation videos</strong> render the field frame by frame, so the moment of target commitment, or the lack of one, is plainly visible. None of the three is possible with a stack of disconnected 2D images.</p>
         <p>Taken together, the two halves tell a story neither can tell alone. The behavioral probe shows that the agent has latent biases, and the 4D field shows where and when its decisions were physically grounded, using the agent's <em>own sampled actions</em>. We argue this is the minimum transparency standard for a VLM-controlled robot working around people, one that researchers can audit, <em>and</em> so can anyone who can look at a room and see where the heat is.
         </p>
+        <p>One caveat on reading the heat. The stylized views put most of it on the targets, with only a little on the floor and horizon, which is roughly what most people would guess the robot is looking at. The real renders are more nuanced. Heat settles on the ground, the back wall and the space around the targets, which may be the agent using its surroundings to find its way, much like we rely on the room around us, not just the thing we're reaching for, to coordinate our bodies. Background attention is also familiar from 2D saliency work on vision models. It can come from a model's spatial priors (learned habits about where things usually are) or from feature redundancy, where the same cue is spread across many parts of the scene. Either way, IG shows that these regions influenced the command, not that they caused it. Occluding them and checking whether the behavior changes is the experiment that would tell us.</p>
       </div>
     </section>
 
