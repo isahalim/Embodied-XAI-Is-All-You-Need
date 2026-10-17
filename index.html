@@ -519,6 +519,7 @@
         </figure>
       </div>
       <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">Left: each query stuck in its own frame (close-ups, crops, even flips), then all 36 frames stacked without world anchoring · right: the same attribution aggregated in one shared world</figcaption>
+      <p style="font-size:12px;color:#6e6e73;margin:4px 0 0;">Heat scale · the higher the value (toward red), the more that region of the world influenced the agent's steering decision</p>
     </section>
 
     <section id="field" style="max-width:1040px;margin:0 auto;padding:56px 24px 8px;"
@@ -579,6 +580,7 @@
         </sc-if>
       </div>
       <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">Stylized: drag to rotate, scrub or replay the trial · real renders come straight from the paper's pipeline</figcaption>
+      <p style="font-size:12px;color:#6e6e73;margin:4px 0 0;">Heat scale · the higher the value (toward red), the more that region of the world influenced the agent's steering decision</p>
     </section>
 
     <section id="diagnostics" style="max-width:1040px;margin:0 auto;padding:56px 24px 8px;"
@@ -654,6 +656,7 @@
         </sc-if>
       </div>
       <figcaption style="font-size:12px;color:#6e6e73;margin-top:10px;">Stylized: drag to orbit · n = 1 is speckled single-trial noise → by n = 20 it has converged on the target and its approach corridor · outcome splits isolate the signature of each choice</figcaption>
+      <p style="font-size:12px;color:#6e6e73;margin:4px 0 0;">Heat scale · the higher the value (toward red), the more that region of the world influenced the agent's steering decision</p>
       <div style="max-width:720px;margin-top:20px;">
         <p>The field supports two more tools. <strong>Outcome-split fields</strong> pool trials by what the agent did (nearer red versus nearer blue, reached versus drifted), which isolates the attention signature of each choice and of failure. <strong>Time-resolved accumulation videos</strong> render the field frame by frame, so the moment of target commitment, or the lack of one, is plainly visible. None of the three is possible with a stack of disconnected 2D images.</p>
         <p>Taken together, the two halves tell a story neither can tell alone. The behavioral probe shows that the agent has latent biases, and the 4D field shows where and when its decisions were physically grounded, using the agent's <em>own sampled actions</em>. We argue this is the minimum transparency standard for a VLM-controlled robot working around people, one that researchers can audit, <em>and</em> so can anyone who can look at a room and see where the heat is.
