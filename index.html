@@ -1393,7 +1393,7 @@ class Component extends DCLogic {
     // label on the consolidated pile
     const tagA = sm((T - 17.6) / 0.6) * (1 - out);
     if (tagA > 0.01) {
-      const txt = '36 frames · 9 viewpoints · no shared coordinates';
+      const txt = '36 viewpoints · 9 episodes · no shared coordinates';
       x.save(); x.globalAlpha = tagA; x.font = this.fnt('700', 10);
       const tw = x.measureText(txt).width + 20;
       x.fillStyle = 'rgba(29,29,31,.72)'; x.beginPath(); x.roundRect(MX + 12, MY + 12, tw, 20, 10); x.fill();
